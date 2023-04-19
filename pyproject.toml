@@ -18,7 +18,7 @@ readme = "README.rst"
 authors = [
     {name = "Jose D. Montoya", email = "dps310@mailmeto.mozmail.com"}
 ]
-urls = {Homepage = "https://github.com/jposada202020/CircuitPython_dps310"}
+urls = {Homepage = "https://github.com/jposada202020/MicroPython_dps310"}
 keywords = [
     "micropython",
     "dps310",
@@ -40,7 +40,7 @@ classifiers = [
 dynamic = ["dependencies", "optional-dependencies"]
 
 [tool.setuptools]
-packages = ["dps310"]
+packages = ["micropython_dps310"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
