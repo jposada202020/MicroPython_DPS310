@@ -184,16 +184,6 @@ class DPS310:
         6: 104.4,
         7: 206.8,
     }
-    _oversample_scalefactor = (
-        524288,
-        1572864,
-        3670016,
-        7864320,
-        253952,
-        516096,
-        1040384,
-        2088960,
-    )
 
     _calib_coeff_temp_src_bit = CBits(1, _TMPCOEFSRCE, 7)
 
@@ -235,24 +225,30 @@ class DPS310:
     @property
     def pressure_oversample(self):
         """
+        Pressure Oversample. In order to achieve a higher precision, the sensor DPS310
+        will read multiple times ( oversampling ), and combine the readings into one result.
+        This increases the current consumption and also the measurement time, reducing the
+        maximum possible measurement rate. It is necessary to balance the accuracy and data rate
+        required for each application with the allowable current consumption.
+
         +------------------------------------------+-------------------------------------------------------------------+
         | Mode                                     | Value                                                             |
         +==========================================+===================================================================+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_1`   | :py:const:`const(0b000)  # 1 time (Pressure Low Precision)`       |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_1`   | :py:const:`0b000`  # 1 time (Pressure Low Precision)              |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_2`   | :py:const:`const(0b001)  # 2 times (Pressure Low Power)`          |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_2`   | :py:const:`0b001`  # 2 times (Pressure Low Power)                 |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_4`   | :py:const:`const(0b010)  # 4 times`                               |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_4`   | :py:const:`0b010`  # 4 times                                      |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_8`   | :py:const:`const(0b011)  # 8 times`                               |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_8`   | :py:const:`0b011`  # 8 times                                      |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_16`  | :py:const:`const(0b100)  # 16 times (Pressure Standard).**`       |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_16`  | :py:const:`0b100`  # 16 times (Pressure Standard).**              |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_32`  | :py:const:`const(0b101)  # 32 times **`                           |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_32`  | :py:const:`0b101`  # 32 times **                                  |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_64`  | :py:const:`const(0b110)  # 64 times (Pressure High Precision) **` |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_64`  | :py:const:`0b110`  # 64 times (Pressure High Precision) **        |
         +------------------------------------------+-------------------------------------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`const(0b111)  # 128 times **`                          |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`0b111`  # 128 times **                                 |
         +------------------------------------------+-------------------------------------------------------------------+
         """
 
@@ -282,21 +278,21 @@ class DPS310:
         +--------------------------------+--------------------------+
         | Mode                           | Value                    |
         +================================+==========================+
-        | :py:const:`dps310.RATE_1_HZ`   | :py:const:`const(0b000)` |
+        | :py:const:`dps310.RATE_1_HZ`   | :py:const:`0b000`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_2_HZ`   | :py:const:`const(0b001)` |
+        | :py:const:`dps310.RATE_2_HZ`   | :py:const:`0b001`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_4_HZ`   | :py:const:`const(0b010)` |
+        | :py:const:`dps310.RATE_4_HZ`   | :py:const:`0b010`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_8_HZ`   | :py:const:`const(0b011)` |
+        | :py:const:`dps310.RATE_8_HZ`   | :py:const:`0b011`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_16_HZ`  | :py:const:`const(0b100)` |
+        | :py:const:`dps310.RATE_16_HZ`  | :py:const:`0b100`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_32_HZ`  | :py:const:`const(0b101)` |
+        | :py:const:`dps310.RATE_32_HZ`  | :py:const:`0b101`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_64_HZ`  | :py:const:`const(0b110)` |
+        | :py:const:`dps310.RATE_64_HZ`  | :py:const:`0b110`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_128_HZ` | :py:const:`const(0b111)` |
+        | :py:const:`dps310.RATE_128_HZ` | :py:const:`0b111`        |
         +--------------------------------+--------------------------+
         """
 
@@ -321,24 +317,30 @@ class DPS310:
     @property
     def temperature_oversample(self):
         """
+        Temperature Oversample. In order to achieve a higher precision, the sensor DPS310
+        will read multiple times ( oversampling ), and combine the readings into one result.
+        This increases the current consumption and also the measurement time, reducing the
+        maximum possible measurement rate. It is necessary to balance the accuracy and data rate
+        required for each application with the allowable current consumption.
+
         +------------------------------------------+---------------------------------------+
         | Mode                                     | Value                                 |
         +==========================================+=======================================+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_1`   | :py:const:`const(0b000)  # 1 time`    |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_1`   | :py:const:`0b000`  # 1 time           |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_2`   | :py:const:`const(0b001)  # 2 times`   |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_2`   | :py:const:`0b001`  # 2 times          |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_4`   | :py:const:`const(0b010)  # 4 times`   |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_4`   | :py:const:`0b010`  # 4 times          |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_8`   | :py:const:`const(0b011)  # 8 times`   |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_8`   | :py:const:`0b011`  # 8 times          |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_16`  | :py:const:`const(0b100)  # 16 times`  |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_16`  | :py:const:`0b100`  # 16 times         |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_32`  | :py:const:`const(0b101)  # 32 times`  |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_32`  | :py:const:`0b101`  # 32 times         |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_64`  | :py:const:`const(0b110)  # 64 times`  |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_64`  | :py:const:`0b110`  # 64 times         |
         +------------------------------------------+---------------------------------------+
-        | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`const(0b111)  # 128 times` |
+        | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`0b111`  # 128 times        |
         +------------------------------------------+---------------------------------------+
         """
         return oversamples_values[self._temperature_oversample]
@@ -357,21 +359,21 @@ class DPS310:
         +--------------------------------+--------------------------+
         | Mode                           | Value                    |
         +================================+==========================+
-        | :py:const:`dps310.RATE_1_HZ`   | :py:const:`const(0b000)` |
+        | :py:const:`dps310.RATE_1_HZ`   | :py:const:`0b000`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_2_HZ`   | :py:const:`const(0b001)` |
+        | :py:const:`dps310.RATE_2_HZ`   | :py:const:`0b001`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_4_HZ`   | :py:const:`const(0b010)` |
+        | :py:const:`dps310.RATE_4_HZ`   | :py:const:`0b010`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_8_HZ`   | :py:const:`const(0b011)` |
+        | :py:const:`dps310.RATE_8_HZ`   | :py:const:`0b011`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_16_HZ`  | :py:const:`const(0b100)` |
+        | :py:const:`dps310.RATE_16_HZ`  | :py:const:`0b100`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_32_HZ`  | :py:const:`const(0b101)` |
+        | :py:const:`dps310.RATE_32_HZ`  | :py:const:`0b101`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_64_HZ`  | :py:const:`const(0b110)` |
+        | :py:const:`dps310.RATE_64_HZ`  | :py:const:`0b110`        |
         +--------------------------------+--------------------------+
-        | :py:const:`dps310.RATE_128_HZ` | :py:const:`const(0b111)` |
+        | :py:const:`dps310.RATE_128_HZ` | :py:const:`0b111`        |
         +--------------------------------+--------------------------+
         """
         rates = {
@@ -531,3 +533,21 @@ class DPS310:
         return 44330 * (
             1.0 - math.pow(self.pressure / self._sea_level_pressure, 0.1903)
         )
+
+    @property
+    def temperature(self) -> float:
+        """The current temperature reading in Celsius"""
+        scaled_rawtemp = self._raw_temperature / self._temp_scale
+        temp = scaled_rawtemp * self._c1 + self._c0 / 2.0
+        return temp
+
+    @property
+    def sea_level_pressure(self) -> float:
+        """The local sea level pressure in hectoPascals (aka millibars). This is used
+        for calculation of :attr:`altitude`. Values are typically in the range
+        980 - 1030."""
+        return self._sea_level_pressure
+
+    @sea_level_pressure.setter
+    def sea_level_pressure(self, value: float) -> None:
+        self._sea_level_pressure = value
