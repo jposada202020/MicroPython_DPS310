@@ -23,12 +23,11 @@ extensions = [
 ]
 
 autodoc_preserve_defaults = True
-
+autodoc_mock_imports = ["adafruit_blinka"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "MicroPython": ("https://docs.micropython.org/en/latest/", None),
-    "Blinka": ("https://docs.circuitpython.org/projects/blinka/en/latest/", None)
 }
 
 # Show the docstring from both the class and its __init__() method.
