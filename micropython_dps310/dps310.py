@@ -19,7 +19,7 @@ This library depends on Micropython
 
 """
 
-# pylint: disable=too-many-arguments, line-too-long
+# pylint: disable=too-many-arguments, line-too-long, too-many-instance-attributes
 
 import time
 import math
@@ -48,10 +48,7 @@ _MEAS_CFG = const(0x08)
 _CFGREG = const(0x09)
 _RESET = const(0x0C)
 
-_DPS310_PRSB2 = const(0x00)  # Highest byte of pressure data
-_DPS310_TMPB2 = const(0x03)  # Highest byte of temperature data
-
-_DPS310_TMPCOEFSRCE = const(0x28)  # Temperature calibration src
+_TMPCOEFSRCE = const(0x28)  # Temperature calibration src
 
 # DPS310 Pressure Oversampling Rate
 SAMPLE_PER_SECOND_1 = const(0b000)  # 1 time (Pressure Low Precision)
@@ -63,8 +60,15 @@ SAMPLE_PER_SECOND_32 = const(0b101)  # 32 times **
 SAMPLE_PER_SECOND_64 = const(0b110)  # 64 times (Pressure High Precision) **
 SAMPLE_PER_SECOND_128 = const(0b111)  # 128 times **
 oversamples_values = (
-SAMPLE_PER_SECOND_1, SAMPLE_PER_SECOND_2, SAMPLE_PER_SECOND_4, SAMPLE_PER_SECOND_8, SAMPLE_PER_SECOND_16,
-SAMPLE_PER_SECOND_32, SAMPLE_PER_SECOND_64, SAMPLE_PER_SECOND_128,)
+    SAMPLE_PER_SECOND_1,
+    SAMPLE_PER_SECOND_2,
+    SAMPLE_PER_SECOND_4,
+    SAMPLE_PER_SECOND_8,
+    SAMPLE_PER_SECOND_16,
+    SAMPLE_PER_SECOND_32,
+    SAMPLE_PER_SECOND_64,
+    SAMPLE_PER_SECOND_128,
+)
 # ** Note: For Pressure to be used in combination with a bit shift. See Interrupt
 # and FIFO configuration (CFG_REG) register
 
@@ -77,9 +81,18 @@ RATE_16_HZ = const(0b100)
 RATE_32_HZ = const(0b101)
 RATE_64_HZ = const(0b110)
 RATE_128_HZ = const(0b111)
-rates_values = (RATE_1_HZ, RATE_2_HZ, RATE_4_HZ, RATE_8_HZ, RATE_16_HZ, RATE_32_HZ, RATE_64_HZ, RATE_128_HZ,)
+rates_values = (
+    RATE_1_HZ,
+    RATE_2_HZ,
+    RATE_4_HZ,
+    RATE_8_HZ,
+    RATE_16_HZ,
+    RATE_32_HZ,
+    RATE_64_HZ,
+    RATE_128_HZ,
+)
 
-IDLE = const(0b000),
+IDLE = const(0b000)
 ONE_PRESSURE = const(0b001)
 ONE_TEMPERATURE = const(0b010)
 CONT_PRESSURE = const(0b101)
@@ -160,13 +173,29 @@ class DPS310:
     _reg0e = CBits(8, 0x0E, 0)
     _reg0f = CBits(8, 0x0F, 0)
     _reg62 = CBits(8, 0x62, 0)
-    # Register User 1
-    # | RES(1) | VDDS |  ---- | ---- | ---- | HTRE | ---- | RES(0) |
 
-    _measurement_times_table = {0: 3.6, 1: 5.2, 2: 8.4, 3: 14.8, 4: 27.6, 5: 53.2, 6: 104.4, 7: 206.8}
-    _oversample_scalefactor = (524288, 1572864, 3670016, 7864320, 253952, 516096, 1040384, 2088960,)
+    _measurement_times_table = {
+        0: 3.6,
+        1: 5.2,
+        2: 8.4,
+        3: 14.8,
+        4: 27.6,
+        5: 53.2,
+        6: 104.4,
+        7: 206.8,
+    }
+    _oversample_scalefactor = (
+        524288,
+        1572864,
+        3670016,
+        7864320,
+        253952,
+        516096,
+        1040384,
+        2088960,
+    )
 
-    _calib_coeff_temp_src_bit = CBits(1, _DPS310_TMPCOEFSRCE, 7)
+    _calib_coeff_temp_src_bit = CBits(1, _TMPCOEFSRCE, 7)
 
     _soft_reset = CBits(4, 0x0C, 0)
 
@@ -180,7 +209,16 @@ class DPS310:
         self._pressure_scale = None
         self._temp_scale = None
 
-        self._oversample_scalefactor = (524288, 1572864, 3670016, 7864320, 253952, 516096, 1040384, 2088960,)
+        self._oversample_scalefactor = (
+            524288,
+            1572864,
+            3670016,
+            7864320,
+            253952,
+            516096,
+            1040384,
+            2088960,
+        )
         self._sea_level_pressure = 1013.25
 
         self._correct_temp()
@@ -193,32 +231,6 @@ class DPS310:
 
         self._wait_temperature_ready()
         self._wait_pressure_ready()
-
-        # testing = self._pressure_oversample
-        # print("press conf reg: ", bin(self._press_conf_reg))
-        # print("antes: ", bin(self.pressure_oversample))
-        # print("antes: ", bin(self.pressure_rate))
-        # self.pressure_oversample = SAMPLE_PER_SECOND_64
-        # self.pressure_rate = RATE_64_HZ
-        # print("press conf reg: ", bin(self._press_conf_reg))
-        # print("despues: ", bin(self.pressure_oversample))
-        # print("antes: ", bin(self.pressure_rate))
-        # self.measurement_time = self._measurement_times_table[self.pressure_oversample]
-
-        # print("temp conf reg: ", bin(self._temp_conf_reg))
-        # print("antes: ", bin(self.temperature_oversample))
-        # print("antes: ", bin(self.temperature_rate))
-        # self.temperature_oversample = SAMPLE_PER_SECOND_8
-        # self.temperature_rate = RATE_64_HZ
-        # print("temp conf reg: ", bin(self._temp_conf_reg))
-        # print("despues: ", bin(self.temperature_oversample))
-        # print("antes: ", bin(self.temperature_rate))
-
-        # print("operation conf reg: ", bin(self._sensor_operation_mode))
-        # print("antes: ", bin(self.mode))
-        # self.mode = CONT_PRESTEMP
-        # print("operation conf reg: ", bin(self._sensor_operation_mode))
-        # print("antes: ", bin(self.mode))
 
     @property
     def pressure_oversample(self):
@@ -244,15 +256,22 @@ class DPS310:
         +------------------------------------------+-------------------------------------------------------------------+
         """
 
-        oversamples = {0: "SAMPLE_PER_SECOND_1", 1: "SAMPLE_PER_SECOND_2", 2: "SAMPLE_PER_SECOND_4",
-                       3: "SAMPLE_PER_SECOND_8", 4: "SAMPLE_PER_SECOND_16", 5: "SAMPLE_PER_SECOND_32",
-                       6: "SAMPLE_PER_SECOND_64", 7: "SAMPLE_PER_SECOND_128", }
-        return oversample_values[self._pressure_oversample]
+        oversamples = {
+            0: "SAMPLE_PER_SECOND_1",
+            1: "SAMPLE_PER_SECOND_2",
+            2: "SAMPLE_PER_SECOND_4",
+            3: "SAMPLE_PER_SECOND_8",
+            4: "SAMPLE_PER_SECOND_16",
+            5: "SAMPLE_PER_SECOND_32",
+            6: "SAMPLE_PER_SECOND_64",
+            7: "SAMPLE_PER_SECOND_128",
+        }
+        return oversamples[self._pressure_oversample]
 
     @pressure_oversample.setter
     def pressure_oversample(self, value: int):
         if value not in oversamples_values:
-            raise ("Value must be a valid oversample setting")
+            raise ValueError("Value must be a valid oversample setting")
         self._pressure_oversample = value
         self._p_shift = value > SAMPLE_PER_SECOND_8
         self._pressure_scale = self._oversample_scalefactor[value]
@@ -281,14 +300,22 @@ class DPS310:
         +--------------------------------+--------------------------+
         """
 
-        rates = {0: "RATE_1_HZ", 1: "RATE_2_HZ", 2: "RATE_4_HZ", 3: "RATE_8_HZ", 4: "RATE_16_HZ", 5: "RATE_32_HZ",
-                 6: "RATE_64_HZ", 7: "RATE_128_HZ"}
+        rates = {
+            0: "RATE_1_HZ",
+            1: "RATE_2_HZ",
+            2: "RATE_4_HZ",
+            3: "RATE_8_HZ",
+            4: "RATE_16_HZ",
+            5: "RATE_32_HZ",
+            6: "RATE_64_HZ",
+            7: "RATE_128_HZ",
+        }
         return rates[self._pressure_rate]
 
     @pressure_rate.setter
     def pressure_rate(self, value: int):
         if value not in rates_values:
-            raise ("Value must be a valid rate setting")
+            raise ValueError("Value must be a valid rate setting")
         self._pressure_rate = value
 
     @property
@@ -319,7 +346,7 @@ class DPS310:
     @temperature_oversample.setter
     def temperature_oversample(self, value: int):
         if value not in oversamples_values:
-            raise ("Value must be a valid oversample setting")
+            raise ValueError("Value must be a valid oversample setting")
         self._temperature_oversample = value
         self._temp_scale = self._oversample_scalefactor[value]
         self._t_shift = value > SAMPLE_PER_SECOND_8
@@ -347,15 +374,23 @@ class DPS310:
         | :py:const:`dps310.RATE_128_HZ` | :py:const:`const(0b111)` |
         +--------------------------------+--------------------------+
         """
-        rates = {0: "RATE_1_HZ", 1: "RATE_2_HZ", 2: "RATE_4_HZ", 3: "RATE_8_HZ", 4: "RATE_16_HZ", 5: "RATE_32_HZ",
-                 6: "RATE_64_HZ", 7: "RATE_128_HZ"}
+        rates = {
+            0: "RATE_1_HZ",
+            1: "RATE_2_HZ",
+            2: "RATE_4_HZ",
+            3: "RATE_8_HZ",
+            4: "RATE_16_HZ",
+            5: "RATE_32_HZ",
+            6: "RATE_64_HZ",
+            7: "RATE_128_HZ",
+        }
 
         return rates[self._temperature_rate]
 
     @temperature_rate.setter
     def temperature_rate(self, value: int):
         if value not in rates_values:
-            raise ("Value must be a valid rate setting")
+            raise ValueError("Value must be a valid rate setting")
         self._temperature_rate = value
 
     @property
@@ -373,10 +408,10 @@ class DPS310:
         |                                    | temperature measurement then switches to ``dps310.IDLE``         |
         +------------------------------------+------------------------------------------------------------------+
         | :py:const:`dps310.CONT_PRESSURE`   | Take pressure measurements at the current `pressure_rate`.       |
-        |                                    | `temperature` will not be updated                                |
+        |                                    | :attr:`temperature` will not be updated                          |
         +------------------------------------+------------------------------------------------------------------+
         | :py:const:`dps310.CONT_TEMP`       | Take temperature measurements at the current `temperature_rate`. |
-        |                                    | `pressure` will not be updated                                   |
+        |                                    | :attr:`pressure` will not be updated                             |
         +------------------------------------+------------------------------------------------------------------+
         | :py:const:`dps310.CONT_PRESTEMP`   | Take temperature and pressure measurements at the current        |
         |                                    | `pressure_rate` and `temperature_rate`                           |
@@ -391,14 +426,14 @@ class DPS310:
         self._sensor_mode = value
 
     def _wait_pressure_ready(self) -> None:
-        """Wait until a pressure measurement is available
-        To avoid waiting indefinitely this function raises an
-        error if the sensor isn't configured for pressure measurements,
-        ie.  ``ONE_PRESSURE``, ``CONT_PRESSURE`` or ``CONT_PRESTEMP``
+        """Wait until a pressure measurement is available. To avoid waiting indefinitely
+        this function raises an error if the sensor isn't configured for pressure measurements,
+
         """
         if self.mode in (IDLE, ONE_TEMPERATURE, CONT_TEMP):
             raise RuntimeError(
-                "Sensor mode is set to idle or temperature measurement, can't wait for a pressure measurement")
+                "Sensor mode is set to idle or temperature measurement, can't wait for a pressure measurement"
+            )
         while self._pressure_ready is False:
             time.sleep(0.001)
 
@@ -406,11 +441,11 @@ class DPS310:
         """Wait until a temperature measurement is available.
         To avoid waiting indefinitely this function raises an
         error if the sensor isn't configured for temperate measurements,
-        ie. ``ONE_TEMPERATURE``, ``CONT_TEMP`` or ``CONT_PRESTEMP``.
         """
         if self.mode in (IDLE, ONE_PRESSURE, CONT_PRESSURE):
             raise RuntimeError(
-                "Sensor mode is set to idle or pressure measurement, can't wait for a temperature measurement")
+                "Sensor mode is set to idle or pressure measurement, can't wait for a temperature measurement"
+            )
         while self._temp_ready is False:
             time.sleep(0.001)
 
@@ -422,9 +457,9 @@ class DPS310:
         coeffs = [None] * 18
         for offset in range(18):
             register = 0x10 + offset
-            coeffs[offset] = struct.unpack("B", self._i2c.readfrom_mem(self._address, register, 1))[0]
-
-        print(coeffs)
+            coeffs[offset] = struct.unpack(
+                "B", self._i2c.readfrom_mem(self._address, register, 1)
+            )[0]
 
         self._c0 = (coeffs[0] << 4) | ((coeffs[1] >> 4) & 0x0F)
         self._c0 = self._twos_complement(self._c0, 12)
@@ -458,9 +493,6 @@ class DPS310:
         self._reg0e = 0
         self._reg0f = 0
 
-        # perform a temperature measurement
-        # the most recent temperature will be saved internally
-        # and used for compensation when calculating pressure
         _unused = self._raw_temperature
 
     @property
@@ -479,11 +511,11 @@ class DPS310:
         scaled_rawpres = raw_pressure / self._pressure_scale
 
         pres_calc = (
-                self._c00
-                + scaled_rawpres
-                * (self._c10 + scaled_rawpres * (self._c20 + scaled_rawpres * self._c30))
-                + scaled_rawtemp
-                * (self._c01 + scaled_rawpres * (self._c11 + scaled_rawpres * self._c21))
+            self._c00
+            + scaled_rawpres
+            * (self._c10 + scaled_rawpres * (self._c20 + scaled_rawpres * self._c30))
+            + scaled_rawtemp
+            * (self._c01 + scaled_rawpres * (self._c11 + scaled_rawpres * self._c21))
         )
 
         final_pressure = pres_calc / 100
@@ -497,6 +529,5 @@ class DPS310:
         ahead of time
         """
         return 44330 * (
-                1.0 - math.pow(self.pressure / self._sea_level_pressure, 0.1903)
+            1.0 - math.pow(self.pressure / self._sea_level_pressure, 0.1903)
         )
-
