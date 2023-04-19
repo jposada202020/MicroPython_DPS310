@@ -24,7 +24,7 @@ This library depends on Micropython
 import time
 import math
 from micropython import const
-from i2c_helpers import CBits, RegisterStruct
+from micropython_dps310.i2c_helpers import CBits, RegisterStruct
 
 try:
     import struct
@@ -168,7 +168,7 @@ class DPS310:
     _raw_pressure = CBits(24, 0x00, 0, 3, False)
     _raw_temperature = CBits(24, 0x03, 0, 3, False)
 
-    _calib_coeff_temp_src_bit = CBits(1, _DPS310_TMPCOEFSRCE, 7)
+    _calib_coeff_temp_src_bit = CBits(1, _TMPCOEFSRCE, 7)
 
     _reg0e = CBits(8, 0x0E, 0)
     _reg0f = CBits(8, 0x0F, 0)
