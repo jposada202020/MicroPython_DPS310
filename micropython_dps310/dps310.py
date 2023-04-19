@@ -34,12 +34,6 @@ except ImportError:
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/jposada202020/MicroPython_DPS310.git"
 
-try:
-    import struct
-except ImportError:
-    import ustruct as struct
-
-
 _REG_WHOAMI = const(0x77)
 _DEVICE_ID = const(0x0D)
 _PRS_CFG = const(0x06)
