@@ -23,7 +23,6 @@ extensions = [
 ]
 
 autodoc_preserve_defaults = True
-autodoc_mock_imports = ["adafruit_blinka"]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
