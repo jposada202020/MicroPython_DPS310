@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2022 Alec Delaney, written for Adafruit Industries
+# SPDX-FileCopyrightText: Copyright (c) 2023 Jose D. Montoya
+#
+# SPDX-License-Identifier: MIT
+
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "setuptools-scm",
+]
+
+[project]
+name = "micropython-dps310"
+description = "MicroPython Driver for the DPS310 sensor"
+version = "0.0.0+auto.0"
+readme = "README.rst"
+authors = [
+    {name = "Jose D. Montoya", email = "dps310@mailmeto.mozmail.com"}
+]
+urls = {Homepage = "https://github.com/jposada202020/CircuitPython_dps310"}
+keywords = [
+    "micropython",
+    "dps310",
+    "DPS310",
+    "sensor",
+    "temperature",
+    "pressure",
+    "altitude",
+]
+license = {text = "MIT"}
+classifiers = [
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Embedded Systems",
+    "Topic :: System :: Hardware",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["dependencies", "optional-dependencies"]
+
+[tool.setuptools]
+packages = ["dps310"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = {optional = {file = ["optional_requirements.txt"]}}
