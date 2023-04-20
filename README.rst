@@ -1,16 +1,9 @@
 Introduction
 ============
 
-
-.. image:: https://readthedocs.org/projects/micropython-dps310/badge/?version=latest
-    :target: https://micropython-dps310.readthedocs.io/
-    :alt: Documentation Status
-
-[![PyPi Package](https://img.shields.io/pypi/v/micropython-dps310.svg)](https://pypi.python.org/pypi/micropython-dps310)
-
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code Style: Black
+[![Documentation Status](https://readthedocs.org/projects/micropython-dps310/badge/?version=latest)](https://micropython-dps310.readthedocs.io/)
+[![PyPi Package](https://img.shields.io/pypi/v/icm20948.svg)](https://pypi.python.org/pypi/icm20948)
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 MicroPython Driver for the DPS310 sensor
 
