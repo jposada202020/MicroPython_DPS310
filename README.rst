@@ -6,6 +6,7 @@ Introduction
     :target: https://micropython-dps310.readthedocs.io/
     :alt: Documentation Status
 
+[![PyPi Package](https://img.shields.io/pypi/v/micropython-dps310.svg)](https://pypi.python.org/pypi/micropython-dps310)
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
