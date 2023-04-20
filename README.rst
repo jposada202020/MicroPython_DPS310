@@ -1,10 +1,20 @@
-# MicroPython Library for the DPS310 Sensor
-
-[![Documentation Status](https://readthedocs.org/projects/micropython-dps310/badge/?version=latest)](https://micropython-dps310.readthedocs.io/)
-[![PyPi Package](https://img.shields.io/pypi/v/icm20948.svg)](https://pypi.python.org/pypi/icm20948)
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+Introduction
+============
 
 
+.. image:: https://readthedocs.org/projects/micropython-dps310/badge/?version=latest
+    :target: https://micropython-dps310.readthedocs.io/
+    :alt: Documentation Status
+
+.. image:: https://img.shields.io/pypi/v/micropython-dps310.svg
+    :target: https://pypi.python.org/pypi/micropython-dps310
+    :alt: PyPi Package
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Code Style: Black
+
+MicroPython Driver for the DPS310 sensor
 
 
 On supported GNU/Linux systems like the Raspberry Pi, you can install the driver locally `from
