@@ -136,3 +136,13 @@ class RegisterStruct:
     def __set__(self, obj, value):
         mem_value = value.to_bytes(self.lenght, "big")
         obj._i2c.writeto_mem(obj._address, self.register, mem_value)
+
+
+def twos_complement(val: int, bits: int) -> int:
+    """
+    Two complements
+    """
+    if val & (1 << (bits - 1)):
+        val -= 1 << bits
+
+    return val
