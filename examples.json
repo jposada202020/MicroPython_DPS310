@@ -1,0 +1,8 @@
+{
+  "urls": [
+    ["micropython_dps310/examples/dps310_advanced.py", "github:jposada202020/MicroPython_DPS310/examples/dps310_advanced.py"],
+    ["micropython_dps310/examples/dps310_temperature.py", "github:jposada202020/MicroPython_DPS310/examples/dps310_temperature.py"],
+    ["micropython_dps310/examples/dps310_simpletest.py", "github:jposada202020/MicroPython_DPS310/examples/dps310_simpletest.py"]
+  ],
+  "version": "0.1"
+}
