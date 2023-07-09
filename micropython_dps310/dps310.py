@@ -23,13 +23,10 @@ This library depends on Micropython
 
 import time
 import math
+import struct
 from micropython import const
 from micropython_dps310.i2c_helpers import CBits, RegisterStruct
 
-try:
-    import struct
-except ImportError:
-    import ustruct as struct
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/jposada202020/MicroPython_DPS310.git"
@@ -63,8 +60,7 @@ oversamples_values = (
     SAMPLE_PER_SECOND_64,
     SAMPLE_PER_SECOND_128,
 )
-# ** Note: For Pressure to be used in combination with a bit shift. See Interrupt
-# and FIFO configuration (CFG_REG) register
+
 
 # DPS310 Pressure Sample Rate
 RATE_1_HZ = const(0b000)
@@ -92,6 +88,14 @@ ONE_TEMPERATURE = const(0b010)
 CONT_PRESSURE = const(0b101)
 CONT_TEMP = const(0b110)
 CONT_PRESTEMP = const(0b111)
+mode_values = (
+    IDLE,
+    ONE_PRESSURE,
+    ONE_TEMPERATURE,
+    CONT_PRESSURE,
+    CONT_TEMP,
+    CONT_PRESTEMP,
+)
 
 
 class DPS310:
@@ -183,7 +187,7 @@ class DPS310:
 
     _soft_reset = CBits(4, 0x0C, 0)
 
-    def __init__(self, i2c, address=_REG_WHOAMI):
+    def __init__(self, i2c, address=0x77):
         self._i2c = i2c
         self._address = address
 
@@ -194,14 +198,14 @@ class DPS310:
         self._temp_scale = None
 
         self._oversample_scalefactor = (
-            524288,
-            1572864,
-            3670016,
-            7864320,
-            253952,
-            516096,
-            1040384,
-            2088960,
+            524288.0,
+            1572864.0,
+            3670016.0,
+            7864320.0,
+            253952.0,
+            516096.0,
+            1040384.0,
+            2088960.0,
         )
         self._sea_level_pressure = 1013.25
 
@@ -217,7 +221,7 @@ class DPS310:
         self._wait_pressure_ready()
 
     @property
-    def pressure_oversample(self):
+    def pressure_oversample(self) -> str:
         """
         Pressure Oversample. In order to achieve a higher precision, the sensor DPS310
         will read multiple times ( oversampling ), and combine the readings into one result.
@@ -259,7 +263,7 @@ class DPS310:
         return oversamples[self._pressure_oversample]
 
     @pressure_oversample.setter
-    def pressure_oversample(self, value: int):
+    def pressure_oversample(self, value: int) -> None:
         if value not in oversamples_values:
             raise ValueError("Value must be a valid oversample setting")
         self._pressure_oversample = value
@@ -267,7 +271,7 @@ class DPS310:
         self._pressure_scale = self._oversample_scalefactor[value]
 
     @property
-    def pressure_rate(self):
+    def pressure_rate(self) -> str:
         """
         +--------------------------------+--------------------------+
         | Mode                           | Value                    |
@@ -303,13 +307,13 @@ class DPS310:
         return rates[self._pressure_rate]
 
     @pressure_rate.setter
-    def pressure_rate(self, value: int):
+    def pressure_rate(self, value: int) -> None:
         if value not in rates_values:
             raise ValueError("Value must be a valid rate setting")
         self._pressure_rate = value
 
     @property
-    def temperature_oversample(self):
+    def temperature_oversample(self) -> str:
         """
         Temperature Oversample. In order to achieve a higher precision, the sensor DPS310
         will read multiple times ( oversampling ), and combine the readings into one result.
@@ -340,7 +344,7 @@ class DPS310:
         return oversamples_values[self._temperature_oversample]
 
     @temperature_oversample.setter
-    def temperature_oversample(self, value: int):
+    def temperature_oversample(self, value: int) -> None:
         if value not in oversamples_values:
             raise ValueError("Value must be a valid oversample setting")
         self._temperature_oversample = value
@@ -348,7 +352,7 @@ class DPS310:
         self._t_shift = value > SAMPLE_PER_SECOND_8
 
     @property
-    def temperature_rate(self):
+    def temperature_rate(self) -> str:
         """
         +--------------------------------+--------------------------+
         | Mode                           | Value                    |
@@ -370,27 +374,28 @@ class DPS310:
         | :py:const:`dps310.RATE_128_HZ` | :py:const:`0b111`        |
         +--------------------------------+--------------------------+
         """
-        rates = {
-            0: "RATE_1_HZ",
-            1: "RATE_2_HZ",
-            2: "RATE_4_HZ",
-            3: "RATE_8_HZ",
-            4: "RATE_16_HZ",
-            5: "RATE_32_HZ",
-            6: "RATE_64_HZ",
-            7: "RATE_128_HZ",
-        }
 
-        return rates[self._temperature_rate]
+        values = (
+            "RATE_1_HZ",
+            "RATE_2_HZ",
+            "RATE_4_HZ",
+            "RATE_8_HZ",
+            "RATE_16_HZ",
+            "RATE_32_HZ",
+            "RATE_64_HZ",
+            "RATE_128_HZ",
+        )
+
+        return values[self._temperature_rate]
 
     @temperature_rate.setter
-    def temperature_rate(self, value: int):
+    def temperature_rate(self, value: int) -> None:
         if value not in rates_values:
             raise ValueError("Value must be a valid rate setting")
         self._temperature_rate = value
 
     @property
-    def mode(self):
+    def mode(self) -> str:
         """
         +------------------------------------+------------------------------------------------------------------+
         | Mode                               | Description                                                      |
@@ -415,10 +420,18 @@ class DPS310:
 
 
         """
-        return self._sensor_mode
+        values = (
+            "IDLE",
+            "ONE_PRESSURE",
+            "ONE_TEMPERATURE",
+            "CONT_PRESSURE",
+            "CONT_TEMP",
+            "CONT_PRESTEMP",
+        )
+        return self._sensor_mode[values]
 
     @mode.setter
-    def mode(self, value: int):
+    def mode(self, value: int) -> None:
         self._sensor_mode = value
 
     def _wait_pressure_ready(self) -> None:
@@ -433,7 +446,7 @@ class DPS310:
         while self._pressure_ready is False:
             time.sleep(0.001)
 
-    def _wait_temperature_ready(self):
+    def _wait_temperature_ready(self) -> None:
         """Wait until a temperature measurement is available.
         To avoid waiting indefinitely this function raises an
         error if the sensor isn't configured for temperate measurements,
@@ -446,7 +459,9 @@ class DPS310:
             time.sleep(0.001)
 
     def _read_calibration(self) -> None:
-
+        """
+        Read the calibration data from the sensor
+        """
         while not self._coefficients_ready:
             time.sleep(0.001)
 
@@ -520,9 +535,9 @@ class DPS310:
 
     @property
     def altitude(self) -> float:
-        """The altitude in meters based on the sea level pressure
-        (:attr:`sea_level_pressure`) - which you must enter
-        ahead of time
+        """
+        The altitude in meters based on the sea level pressure
+        (:attr:`sea_level_pressure`) - which you must enter ahead of time
         """
         return 44330 * (
             1.0 - math.pow(self.pressure / self._sea_level_pressure, 0.1903)
