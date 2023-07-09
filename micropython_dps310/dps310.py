@@ -19,7 +19,7 @@ This library depends on Micropython
 
 """
 
-# pylint: disable=too-many-arguments, line-too-long, too-many-instance-attributes
+# pylint: disable=line-too-long
 
 import time
 import math
@@ -31,7 +31,7 @@ from micropython_dps310.i2c_helpers import CBits, RegisterStruct
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/jposada202020/MicroPython_DPS310.git"
 
-_REG_WHOAMI = const(0x77)
+
 _DEVICE_ID = const(0x0D)
 _PRS_CFG = const(0x06)
 _TMP_CFG = const(0x07)
@@ -249,18 +249,17 @@ class DPS310:
         | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`0b111`  # 128 times **                                 |
         +------------------------------------------+-------------------------------------------------------------------+
         """
-
-        oversamples = {
-            0: "SAMPLE_PER_SECOND_1",
-            1: "SAMPLE_PER_SECOND_2",
-            2: "SAMPLE_PER_SECOND_4",
-            3: "SAMPLE_PER_SECOND_8",
-            4: "SAMPLE_PER_SECOND_16",
-            5: "SAMPLE_PER_SECOND_32",
-            6: "SAMPLE_PER_SECOND_64",
-            7: "SAMPLE_PER_SECOND_128",
-        }
-        return oversamples[self._pressure_oversample]
+        values = (
+            "SAMPLE_PER_SECOND_1",
+            "SAMPLE_PER_SECOND_2",
+            "SAMPLE_PER_SECOND_4",
+            "SAMPLE_PER_SECOND_8",
+            "SAMPLE_PER_SECOND_16",
+            "SAMPLE_PER_SECOND_32",
+            "SAMPLE_PER_SECOND_64",
+            "SAMPLE_PER_SECOND_128",
+        )
+        return values[self._pressure_oversample]
 
     @pressure_oversample.setter
     def pressure_oversample(self, value: int) -> None:
@@ -294,17 +293,17 @@ class DPS310:
         +--------------------------------+--------------------------+
         """
 
-        rates = {
-            0: "RATE_1_HZ",
-            1: "RATE_2_HZ",
-            2: "RATE_4_HZ",
-            3: "RATE_8_HZ",
-            4: "RATE_16_HZ",
-            5: "RATE_32_HZ",
-            6: "RATE_64_HZ",
-            7: "RATE_128_HZ",
-        }
-        return rates[self._pressure_rate]
+        values = (
+            "RATE_1_HZ",
+            "RATE_2_HZ",
+            "RATE_4_HZ",
+            "RATE_8_HZ",
+            "RATE_16_HZ",
+            "RATE_32_HZ",
+            "RATE_64_HZ",
+            "RATE_128_HZ",
+        )
+        return values[self._pressure_rate]
 
     @pressure_rate.setter
     def pressure_rate(self, value: int) -> None:
@@ -341,7 +340,17 @@ class DPS310:
         | :py:const:`dps310.SAMPLE_PER_SECOND_128` | :py:const:`0b111`  # 128 times        |
         +------------------------------------------+---------------------------------------+
         """
-        return oversamples_values[self._temperature_oversample]
+        values = (
+            "SAMPLE_PER_SECOND_1",
+            "SAMPLE_PER_SECOND_2",
+            "SAMPLE_PER_SECOND_4",
+            "SAMPLE_PER_SECOND_8",
+            "SAMPLE_PER_SECOND_16",
+            "SAMPLE_PER_SECOND_32",
+            "SAMPLE_PER_SECOND_64",
+            "SAMPLE_PER_SECOND_128",
+        )
+        return values[self._temperature_oversample]
 
     @temperature_oversample.setter
     def temperature_oversample(self, value: int) -> None:
@@ -428,7 +437,7 @@ class DPS310:
             "CONT_TEMP",
             "CONT_PRESTEMP",
         )
-        return self._sensor_mode[values]
+        return values[self._sensor_mode]
 
     @mode.setter
     def mode(self, value: int) -> None:
