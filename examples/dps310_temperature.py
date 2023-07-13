@@ -2,11 +2,11 @@
 
 import time
 from machine import Pin, I2C
-import dps310
+from micropython_dps310 import dps310
 
 i2c = I2C(sda=Pin(8), scl=Pin(9))  # Correct I2C pins for UM FeatherS2
 dps = dps310.DPS310(i2c)
 
 while True:
-    print("Temperature C:", dps.temperature)
+    print(f"Temperature {dps.temperature}C")
     time.sleep(1)

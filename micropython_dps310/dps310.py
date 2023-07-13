@@ -187,7 +187,7 @@ class DPS310:
 
     _soft_reset = CBits(4, 0x0C, 0)
 
-    def __init__(self, i2c, address=0x77):
+    def __init__(self, i2c, address=0x77) -> None:
         self._i2c = i2c
         self._address = address
 
