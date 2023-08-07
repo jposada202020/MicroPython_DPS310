@@ -38,7 +38,7 @@ To install directly using a WIFI capable board
 
 .. code-block:: shell
 
-    mip install github:jposada202020/MicroPython_DPS310
+    mip.install("ithub:jposada202020/MicroPython_DPS310")
 
 
 Installing Library Examples
@@ -54,7 +54,7 @@ To install directly using a WIFI capable board
 
 .. code-block:: shell
 
-    mip install github:jposada202020/MicroPython_DPS310/examples.json
+    mip.install("github:jposada202020/MicroPython_DPS310/examples.json")
 
 
 
