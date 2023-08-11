@@ -8,7 +8,7 @@
 MicroPython Driver for the DP310 Barametric Sensor
 
 
-* Author(s): Jose D. Montoya
+* Author: Jose D. Montoya
 
 Implementation Notes
 --------------------
@@ -548,9 +548,13 @@ class DPS310:
         The altitude in meters based on the sea level pressure
         (:attr:`sea_level_pressure`) - which you must enter ahead of time
         """
-        return 44330 * (
+        return 44330.0 * (
             1.0 - math.pow(self.pressure / self._sea_level_pressure, 0.1903)
         )
+
+    @altitude.setter
+    def altitude(self, value: float) -> None:
+        self.sea_level_pressure = self.pressure / (1.0 - value / 44330.0) ** 5.255
 
     @property
     def temperature(self) -> float:

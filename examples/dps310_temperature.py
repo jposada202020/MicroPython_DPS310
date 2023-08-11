@@ -8,5 +8,6 @@ i2c = I2C(sda=Pin(8), scl=Pin(9))  # Correct I2C pins for UM FeatherS2
 dps = dps310.DPS310(i2c)
 
 while True:
-    print(f"Temperature {dps.temperature}C")
+    print(f"Temperature {dps.temperature}°C")
+    print()
     time.sleep(1)

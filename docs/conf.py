@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # SPDX-FileCopyrightText: 2017 Scott Shawcroft, written for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
@@ -32,7 +30,6 @@ except ImportError:
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
-    "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinx_immaterial",
 ]
@@ -186,10 +183,6 @@ sphinx_immaterial_custom_admonitions = [
         "override": True,
     },
 ]
-
-python_type_aliases = {
-    "DigitalInOut": "digitalio.DigitalInOut",
-}
 
 object_description_options = [
     ("py:.*", dict(generate_synopses="first_sentence")),

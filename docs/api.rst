@@ -1,3 +1,6 @@
+MicroPython DPS310 Library
+===============================
+
 .. automodule:: micropython_dps310
     :members:
 

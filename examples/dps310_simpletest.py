@@ -9,4 +9,5 @@ dps = dps310.DPS310(i2c)
 
 while True:
     print(f"Pressure: {dps.pressure}HPa")
+    print()
     time.sleep(1)
