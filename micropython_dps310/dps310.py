@@ -429,14 +429,15 @@ class DPS310:
 
 
         """
-        values = (
-            "IDLE",
-            "ONE_PRESSURE",
-            "ONE_TEMPERATURE",
-            "CONT_PRESSURE",
-            "CONT_TEMP",
-            "CONT_PRESTEMP",
-        )
+        values = {
+            IDLE: "IDLE",
+            ONE_PRESSURE: "ONE_PRESSURE",
+            ONE_TEMPERATURE: "ONE_TEMPERATURE",
+            CONT_PRESSURE: "CONT_PRESSURE",
+            CONT_TEMP: "CONT_TEMP",
+            CONT_PRESTEMP: "CONT_PRESTEMP",
+        }
+
         return values[self._sensor_mode]
 
     @mode.setter
